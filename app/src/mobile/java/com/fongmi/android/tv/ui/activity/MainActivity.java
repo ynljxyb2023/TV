@@ -171,6 +171,11 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
         VideoActivity.push(this, event.getText());
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRestoreEvent(RestoreEvent event) {
+        initConfig();
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (mBinding.navigation.getSelectedItemId() == item.getItemId()) return false;
