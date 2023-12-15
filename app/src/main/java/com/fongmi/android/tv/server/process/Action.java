@@ -36,7 +36,7 @@ public class Action implements Process {
     @Override
     public NanoHTTPD.Response doResponse(NanoHTTPD.IHTTPSession session, String path, Map<String, String> files) {
         Map<String, String> params = session.getParms();
-        switch (Objects.requireNonNullElse(params.get("do"), "")) {
+        switch (params.get("do")) {
             case "search":
                 onSearch(params);
                 return Nano.success();
@@ -135,9 +135,9 @@ public class Action implements Process {
 
     private void sendHistory(Device device, Map<String, String> params) {
         try {
-            String url = Objects.requireNonNullElse(params.get("url"), ApiConfig.getUrl());
+            String url = params.get("url");
             FormBody.Builder body = new FormBody.Builder();
-            body.add("url", url);
+            body.add("url", TextUtils.isEmpty(url) ? ApiConfig.getUrl() : url);
             body.add("targets", App.gson().toJson(History.get(Config.find(url, 0).getId())));
             OkHttp.newCall(OkHttp.client(Constant.TIMEOUT_SYNC), device.getIp().concat("/action?do=sync&mode=0&type=history"), body.build()).execute();
         } catch (Exception e) {
