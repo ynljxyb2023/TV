@@ -100,7 +100,7 @@ public class CustomWebView extends WebView {
                 String host = UrlUtil.host(url);
                 if (TextUtils.isEmpty(host)) return empty;
                 if (ApiConfig.get().getAds().contains(host)) return empty;
-                if (isVideoFormat(url, headers)) post(headers, url);
+                if (isVideoFormat(headers, url)) post(headers, url);
                 return super.shouldInterceptRequest(view, url);
             }
 
