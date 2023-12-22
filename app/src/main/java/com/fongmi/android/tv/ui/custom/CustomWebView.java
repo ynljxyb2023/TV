@@ -102,11 +102,11 @@ public class CustomWebView extends WebView {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
                 String host = UrlUtil.host(url);
-                if (TextUtils.isEmpty(host)) return empty;
-                if (ApiConfig.get().getAds().contains(host)) return empty;
+                if (TextUtils.isEmpty(host) || ApiConfig.get().getAds().contains(host)) return empty;
+                if (host.equals("challenges.cloudflare.com")) App.post(() -> showDialog());
                 if (isVideoFormat(headers, url)) post(headers, url);
                 return super.shouldInterceptRequest(view, url);
-			}
+            }
 
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
