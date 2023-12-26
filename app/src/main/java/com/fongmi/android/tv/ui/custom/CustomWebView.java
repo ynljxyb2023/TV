@@ -70,9 +70,9 @@ public class CustomWebView extends WebView {
         getSettings().setDomStorageEnabled(true);
         getSettings().setJavaScriptEnabled(true);
         getSettings().setLoadWithOverviewMode(true);
-        getSettings().setMediaPlaybackRequiresUserGesture(false);
         getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        if (Build.VERSION.SDK_INT >= 17) getSettings().setMediaPlaybackRequiresUserGesture(false);
+        if (Build.VERSION.SDK_INT >= 21) getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         setWebViewClient(webViewClient());
     }
 
@@ -120,7 +120,8 @@ public class CustomWebView extends WebView {
                 String host = UrlUtil.host(url);
                 if (TextUtils.isEmpty(host) || ApiConfig.get().getAds().contains(host)) return empty;
                 if (host.equals("challenges.cloudflare.com")) App.post(() -> showDialog());
-                if (isVideoFormat(headers, url)) post(headers, url);
+                if (detect && url.contains("player/?url=")) onParseAdd(headers, url);
+                if (isVideoFormat(headers, url)) interrupt(headers, url);
                 return super.shouldInterceptRequest(view, url);
             }
 
@@ -172,7 +173,7 @@ public class CustomWebView extends WebView {
         if (TextUtils.isEmpty(script.get(0))) {
             evaluate(script.subList(1, script.size()));
         } else {
-            evaluateJavascript(script.get(0), value -> evaluate(script.subList(1, script.size())));
+            loadUrl("javascript:" + script.get(0));
         }
     }
 
