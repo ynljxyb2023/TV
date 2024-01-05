@@ -80,7 +80,6 @@ public class Decoder {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
         data = data.substring(data.indexOf("2324") + 4, data.length() - 26);
-        byte[] decryptData = cipher.doFinal(decodeHex(data));
         byte[] decryptData = cipher.doFinal(Util.hex2byte(data));
         return new String(decryptData, "UTF-8");
     }
