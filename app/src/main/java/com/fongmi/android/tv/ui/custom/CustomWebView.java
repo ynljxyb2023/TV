@@ -118,7 +118,7 @@ public class CustomWebView extends WebView {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
                 String host = UrlUtil.host(url);
-                if (TextUtils.isEmpty(host) || ApiConfig.get().getAds().contains(host)) return empty;
+                if (TextUtils.isEmpty(host) || VodConfig.get().getAds().contains(host)) return empty;
                 if (host.equals("challenges.cloudflare.com")) App.post(() -> showDialog());
                 if (detect && url.contains("player/?url=")) onParseAdd(headers, url);
                 if (isVideoFormat(headers, url)) interrupt(headers, url);
