@@ -19,9 +19,9 @@ import androidx.viewbinding.ViewBinding;
 import com.fongmi.android.tv.App;
 import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.Updater;
-import com.fongmi.android.tv.api.ApiConfig;
-import com.fongmi.android.tv.api.LiveConfig;
-import com.fongmi.android.tv.api.WallConfig;
+import com.fongmi.android.tv.api.config.LiveConfig;
+import com.fongmi.android.tv.api.config.VodConfig;
+import com.fongmi.android.tv.api.config.WallConfig;
 import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.bean.RestoreEvent;
 import com.fongmi.android.tv.databinding.ActivityMainBinding;
@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
     private void initConfig() {
         WallConfig.get().init();
         LiveConfig.get().init().load();
-        ApiConfig.get().init().load(getCallback());
+        VodConfig.get().init().load(getCallback());
     }
 
     private Callback getCallback() {
@@ -228,7 +228,7 @@ public class MainActivity extends BaseActivity implements NavigationBarView.OnIt
         super.onDestroy();
         WallConfig.get().clear();
         LiveConfig.get().clear();
-        ApiConfig.get().clear();
+        VodConfig.get().clear();
         AppDatabase.backup();
         Source.get().exit();
         Server.get().stop();
