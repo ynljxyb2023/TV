@@ -9,12 +9,6 @@ android {
         minSdk 16
         targetSdk 28
     }
-
-    configurations.configureEach {
-        resolutionStrategy {
-            force 'com.squareup.okhttp3:okhttp:' + okhttpVersion
-        }
-    }
 }
 
 dependencies {
