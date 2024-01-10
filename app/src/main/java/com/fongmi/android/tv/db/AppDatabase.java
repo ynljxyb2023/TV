@@ -48,13 +48,12 @@ public abstract class AppDatabase extends RoomDatabase {
         return instance;
     }
 
-    public static String getDate() {
-        File db = new File(Path.tv(), NAME);
-        return Setting.isBackupAuto() ? ResUtil.getString(R.string.setting_backup_auto) : getBackupKey().exists() && db.exists() ? Util.format(new SimpleDateFormat("MMddHHmmss", Locale.getDefault()), db.lastModified()) : "";
+    public static File getBackup() {
+        return new File(Path.tv(), NAME);
     }
 
-    public static File getBackupKey() {
-        return new File(Path.tv(), "." + Util.getDeviceId());
+    public static String getDate() {
+        return Setting.isBackupAuto() ? ResUtil.getString(R.string.setting_backup_auto) : getBackup().exists() ? Util.format(new SimpleDateFormat("MMddHHmmss", Locale.getDefault()), getBackup().lastModified()) : "";
     }
 
     public static void backup() {
@@ -69,7 +68,6 @@ public abstract class AppDatabase extends RoomDatabase {
             if (db.exists()) Path.copy(db, new File(Path.tv(), db.getName()));
             if (wal.exists()) Path.copy(wal, new File(Path.tv(), wal.getName()));
             if (shm.exists()) Path.copy(shm, new File(Path.tv(), shm.getName()));
-            Path.newFile(getBackupKey());
             App.post(callback::success);
         });
     }
@@ -84,7 +82,6 @@ public abstract class AppDatabase extends RoomDatabase {
             if (wal.exists()) Path.move(wal, App.get().getDatabasePath(wal.getName()).getAbsoluteFile());
             if (shm.exists()) Path.move(shm, App.get().getDatabasePath(shm.getName()).getAbsoluteFile());
             App.post(callback::success);
-            Path.clear(Path.tv());
         });
     }
 
